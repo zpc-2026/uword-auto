@@ -13,6 +13,29 @@ $ uword learn 20
 {"ok": true, "learned": 20, "right": 20, "wrong": 0, "minutes_added": 8}
 ```
 
+## 别人拿到后照这个走（三条命令）
+
+```bash
+git clone https://github.com/zpc-2026/uword-auto.git && cd uword-auto
+
+python -m uword mock          # ① 自检：起本地假接口跑完整流程，不需要账号、不需要密码
+                              #    预期最后一行：自检通过
+
+python -m uword login --user 自己的手机号 --password '自己的密码'
+                              # ② 登录一次，会话缓存到 ~/.uword/token.json（权限 600）
+
+python -m uword status        # ③ 应看到自己的词书、已学词数、积分、复习待办
+```
+
+需要 Python ≥ 3.9，零第三方依赖（`pip install -e .` 可选，只是装出 `uword` 命令）。
+账号是微信登录、没设过密码的，用 `python -m uword login --sms --phone 手机号` 走短信设密码。
+
+没登录直接跑会明确报错，不会静默失败：
+
+```
+[错误] PermissionError: 没有可用会话：先 uword login，或设置 UWORD_TOKEN
+```
+
 ## 为什么要自己做
 
 小程序/网页用的都是同一套 HTTP 接口，反编译前端拿到完整契约后，自动化只剩三个动作：
@@ -118,6 +141,8 @@ docs/AGENT.md          agent 接入
 
 ## tools/ 里的侦察脚本（换接口时用得上）
 
+完整索引见 [tools/README.md](tools/README.md)，日常使用完全用不到这些。
+
 | 脚本 | 作用 |
 |---|---|
 | `fetch_uword_chunks.py` | 下载 H5 各页面 chunk，抽取全部后端端点 |
@@ -127,6 +152,27 @@ docs/AGENT.md          agent 接入
 | `mitm.py` + `proc_mem_scan.py` | HTTPS 中间人、进程内存字符串扫描（取证用） |
 | `mock_server.py` | 离线假接口，供 `uword mock` 自检 |
 | `check_solver.py` / `check_account.py` | 抽查判题正确率、只读核对账号数据 |
+
+## 常见问题
+
+| 现象 | 原因 | 解决 |
+|---|---|---|
+| `没有可用会话：先 uword login` | 没登录 / 缓存被清 | `python -m uword login ...` |
+| `用户登录超时`（接口 code 50000） | 会话过期 | 重登；或设 `UWORD_USER`/`UWORD_PASS` 让 agent 接口自动重登 |
+| `登录失败 [2012]` | 密码错 | 换密码，或 `--sms` 重新设密码 |
+| `账号和选择的角色不一致` | `usercode` 与该账号角色不符 | 学生用默认 `"1"` |
+| `发短信失败 [1302]` | 走错成邮箱分支 | 用 `login --sms`，它走 `sms_code_captcha`（要图片验证码） |
+| `没有待学新词了` | 词书已学完 | 换词书，或只跑 `review` |
+| `plan 被重建了` | 直接调 add.htm 没带 id | 用 `uword plan`，它整体回写原计划对象 |
+
+退出码：`0` 成功 / `1` 业务未成功 / `2` 参数或自检失败 / `3` 会话失效 / `4` 接口错误 / `130` 手动中断。
+
+多机 / 容器 / CI 里不想存密码，直接传会话串：
+
+```bash
+export UWORD_TOKEN=FP3DE8BE29…          # 从已登录机器的 ~/.uword/token.json 里取
+python -m uword status --json
+```
 
 ## 边界与已知问题
 
