@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uword-auto"
+version = "1.0.0"
+description = "外研U词（word.fltrp.com）自动化：背词、单词检验、复习，含 agent 可调用的 JSON 接口"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "uword-auto" }]
+keywords = ["unipus", "fltrp", "vocabulary", "automation", "agent"]
+dependencies = []
+
+[project.optional-dependencies]
+dev = []
+
+[project.scripts]
+uword = "uword.cli:main"
+
+[tool.setuptools]
+packages = ["uword", "uword.fltrp", "uword.agent"]

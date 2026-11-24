@@ -1,0 +1,52 @@
+{
+  "_说明": "把 base_url / headers / endpoints 换成抓包(HAR)里的真值即可；字段名对不上时改 fields。",
+  "base_url": "https://[API_HOST]",
+  "headers": {
+    "User-Agent": "[MINIPROGRAM_UA]",
+    "Referer": "https://servicewechat.com/[APPID]/[VERSION]/page-frame.html",
+    "Accept": "application/json, text/plain, */*",
+    "token": "[TOKEN]",
+    "Cookie": "[COOKIE]",
+    "X-Device-Id": "[DEVICE_ID]"
+  },
+  "timeout": 15,
+  "retry": 3,
+  "pacing": { "min_gap": 0.9, "max_gap": 2.8, "burst": 3 },
+  "limits": {
+    "words_per_run": 40,
+    "page_size": 30,
+    "quiz_rounds": 3,
+    "review_rounds": 8,
+    "max_minutes": 60,
+    "fail_budget": 12
+  },
+  "timing": {
+    "word_seconds": [6, 14],
+    "heartbeat_every": [18, 32],
+    "rest_every_words": [12, 18],
+    "rest_seconds": [20, 55]
+  },
+  "answer_chain": ["bank", "index", "echo", "guess"],
+  "endpoints": {
+    "book_list":   { "method": "GET",  "path": "/api/v1/book/list", "params": {} },
+    "word_list":   { "method": "GET",  "path": "/api/v1/word/list",
+                     "params": { "bookId": "{book_id}", "page": "{page}", "size": "{size}" } },
+    "learn_start": { "method": "POST", "path": "/api/v1/study/start",
+                     "json": { "bookId": "{book_id}" } },
+    "learn_word":  { "method": "POST", "path": "/api/v1/study/word",
+                     "json": { "wordId": "{word_id}", "cost": "{cost}", "know": "{know}" } },
+    "heartbeat":   { "method": "POST", "path": "/api/v1/study/heartbeat",
+                     "json": { "sessionId": "{session_id}", "cost": "{cost}" } },
+    "quiz_list":   { "method": "GET",  "path": "/api/v1/quiz/list",
+                     "params": { "bookId": "{book_id}", "page": "{page}", "size": "{size}" } },
+    "review_list": { "method": "GET",  "path": "/api/v1/review/list",
+                     "params": { "bookId": "{book_id}", "page": "{page}", "size": "{size}" } },
+    "quiz_submit": { "method": "POST", "path": "/api/v1/quiz/submit",
+                     "json": { "quizId": "{quiz_id}", "answer": "{answer}", "cost": "{cost}" } },
+    "progress":    { "method": "GET",  "path": "/api/v1/study/progress",
+                     "params": { "bookId": "{book_id}" } }
+  },
+  "storage": "uword.db",
+  "answer_bank": "answer_bank.json",
+  "log_file": "uword.log"
+}
