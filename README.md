@@ -77,13 +77,30 @@ SSO 登录 → 绑定外研U词账号 → 换会话串（Authorization）
 
 ## 安装
 
+三种方式，都只需要 Python ≥ 3.9，**零第三方依赖**：
+
 ```bash
-git clone <this-repo> && cd uword-auto
-pip install -e .            # 也可以不装，直接用 python -m uword
-python -m uword mock        # 离线自检，不碰真实账号
+# ① 从 Release 直接装（推荐给只想要命令的人）
+pip install https://github.com/zpc-2026/uword-auto/releases/download/v1.0.0/uword_auto-1.0.0-py3-none-any.whl
+uword --help
+
+# ② 源码 zip（连 pip 都不想用；解压后直接跑）
+#    https://github.com/zpc-2026/uword-auto/releases/download/v1.0.0/uword-auto-1.0.0-src.zip
+unzip uword-auto-1.0.0-src.zip && cd uword-auto-1.0.0
+python -m uword mock
+
+# ③ 克隆仓库（想改代码/看 tools 时）
+git clone https://github.com/zpc-2026/uword-auto.git && cd uword-auto
+pip install -e .            # 可选，装了才有 `uword` 命令；不装就用 python -m uword
 ```
 
-要求 Python ≥ 3.9，无第三方依赖。
+装完先跑一次自检（不碰真实账号、不需要密码）：
+
+```bash
+python -m uword mock        # 或 uword mock
+```
+
+构建产物自己也能打：`python tools/build_wheel.py` → `dist/uword_auto-1.0.0-py3-none-any.whl`
 
 ## 登录
 
