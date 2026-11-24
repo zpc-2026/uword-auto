@@ -13,6 +13,44 @@ $ uword learn 20
 {"ok": true, "learned": 20, "right": 20, "wrong": 0, "minutes_added": 8}
 ```
 
+## 搜索关键词（怎么找到这个项目）
+
+GitHub 站内搜（名字/描述/topics 会被索引）：
+
+```
+uword-auto                          # 仓库名
+uword-auto user:zpc-2026            # 限定作者，最稳
+外研U词                              # 中文名
+外研U词 自动化
+fltrp 单词
+unipus 单词
+topic:unipus
+topic:fltrp
+topic:word-memorization
+vocabulary automation fltrp
+```
+
+Topic 页（GitHub 已经收录，直接能点到）：
+
+- https://github.com/topics/unipus
+- https://github.com/topics/fltrp
+
+外部搜索引擎（README 正文会被索引，用中文长词更容易命中）：
+
+```
+外研U词 自动化 脚本
+外研U词 背单词 命令行
+外研社 U词 接口
+word.fltrp.com 接口
+fltrp 背单词 自动化
+U校园 单词 自动化 开源
+```
+
+关键词对照（README 里已铺开，方便被检索）：
+
+`外研U词` `外研社` `FLTRP` `U-word` `Unipus` `U校园` `word.fltrp.com` `背单词` `单词检验`
+`复习队列` `词汇量` `自动化` `脚本` `CLI` `agent` `JSON API`
+
 ## 这个项目是干什么的
 
 **把外研U词里那些必须手点的动作，变成一条命令、或者三行代码。**
